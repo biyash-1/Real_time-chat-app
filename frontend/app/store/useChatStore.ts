@@ -88,7 +88,7 @@ export const useChatStore = create<ChatStoreState>((set, get) => ({
       if (!response.ok) {
         throw new Error("Failed to delete message");
       }
-      const data = await response.json();
+    
       set({ messages: messages.filter((message) => message._id !== messageId) });
     } catch (error) {
       console.error(`Failed to delete message ${messageId}:`, error);
