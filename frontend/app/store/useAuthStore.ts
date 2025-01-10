@@ -2,15 +2,16 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { io, Socket } from "socket.io-client";
 import axios from "axios";
-import {toast} from "react-hot-toast";
+import { toast } from "react-hot-toast";
 
+// Use the BASE_URL to handle different environments (development vs production)
+const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:3001" : "/";
 
 interface AuthState {
- 
   authUser: any;
   isUpdatingProfile: boolean;
   onlineUsers: any[];
-  isCheckingAuth:boolean;
+  isCheckingAuth: boolean;
   socket: Socket | null;
   checkAuth: () => Promise<void>;
   login: (data: { email: string; password: string }) => Promise<void>;
@@ -23,24 +24,22 @@ interface AuthState {
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
-     
       hasHydrated: false,
       authUser: null,
-      isCheckingAuth:true,
+      isCheckingAuth: true,
       onlineUsers: [],
       isUpdatingProfile: false,
-      socket: null, 
+      socket: null,
 
       checkAuth: async () => {
         try {
-          const response = await fetch("http://localhost:3001/api/user/checkAuth", {
+          const response = await fetch(`${BASE_URL}/api/user/checkAuth`, {
             method: "GET",
             credentials: "include",
           });
           if (response.ok) {
             const data = await response.json();
-            set({ authUser: data.user,isCheckingAuth:false });
-            
+            set({ authUser: data.user, isCheckingAuth: false });
             get().connectSocket();
           } else {
             set({ authUser: null });
@@ -53,7 +52,7 @@ export const useAuthStore = create<AuthState>()(
 
       login: async (data: { email: string; password: string }) => {
         try {
-          const response = await fetch("http://localhost:3001/api/user/login", {
+          const response = await fetch(`${BASE_URL}/api/user/login`, {
             method: "POST",
             credentials: "include",
             headers: {
@@ -64,9 +63,9 @@ export const useAuthStore = create<AuthState>()(
 
           if (response.ok) {
             const responseData = await response.json();
-            set({ authUser: responseData.user }); 
-            toast.success("login sucessfull")
-            get().connectSocket(); 
+            set({ authUser: responseData.user });
+            toast.success("Login successful");
+            get().connectSocket();
             console.log("auth user in login function is", get().authUser);
           } else {
             const errorData = await response.json();
@@ -80,11 +79,11 @@ export const useAuthStore = create<AuthState>()(
 
       logout: async () => {
         try {
-          await fetch("http://localhost:3001/api/user/logout", {
+          await fetch(`${BASE_URL}/api/user/logout`, {
             method: "POST",
             credentials: "include",
           });
-          toast.success("logout succesfull")
+          toast.success("Logout successful");
           set({ authUser: null });
           get().disconnectSocket();
         } catch (err) {
@@ -96,22 +95,19 @@ export const useAuthStore = create<AuthState>()(
         set({ isUpdatingProfile: true });
         try {
           const response = await axios.patch(
-            "http://localhost:3001/api/user/update-profile", 
+            `${BASE_URL}/api/user/update-profile`,
             { profilepic },
             {
               headers: {
                 "Content-Type": "application/json",
               },
-              withCredentials: true,  
+              withCredentials: true,
             }
           );
 
-          const updateduser = response.data;
-          console.log("updated user is",updateduser);
-          set({ authUser: updateduser });
-          
-      
-         
+          const updatedUser = response.data;
+          console.log("Updated user is", updatedUser);
+          set({ authUser: updatedUser });
         } catch (err) {
           console.error("Error updating profile:", err);
         } finally {
@@ -119,36 +115,33 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      
       connectSocket: () => {
-        const { authUser,socket } = get();
+        const { authUser, socket } = get();
         console.log("authUser", authUser);
 
-        if(!authUser || !authUser._id){
-          console.log("no auth user");
+        if (!authUser || !authUser._id) {
+          console.log("No auth user");
           return;
         }
 
-       
-       if(authUser && !socket){
-        
-         const newsocket = io("http://localhost:3001", {
-           query: {
-             userId: authUser._id,
-           },
-         });
-         newsocket.connect();
- 
-         set({ socket: newsocket });
- 
-         console.log("socket from getconnect function is", socket);
-         newsocket.on("getOnlineUsers", (userIds) => {
-           console.log("Online users received:", userIds);
-           set({ onlineUsers: userIds });
-         });
-         console.log("onone");
-       }    
-     },
+        if (authUser && !socket) {
+          const newSocket = io(BASE_URL, {
+            query: {
+              userId: authUser._id,
+            },
+          });
+          newSocket.connect();
+
+          set({ socket: newSocket });
+
+          console.log("Socket from connectSocket function is", socket);
+          newSocket.on("getOnlineUsers", (userIds) => {
+            console.log("Online users received:", userIds);
+            set({ onlineUsers: userIds });
+          });
+          console.log("Socket connected");
+        }
+      },
 
       disconnectSocket: () => {
         const socket = get().socket;
@@ -162,18 +155,22 @@ export const useAuthStore = create<AuthState>()(
       name: "auth-storage",
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
-       
         authUser: state.authUser,
-      
-        
-       
+        onlineUsers: state.onlineUsers,
+        isCheckingAuth: state.isCheckingAuth,
+        isUpdatingProfile: state.isUpdatingProfile,
+        // Exclude functions and socket state from persistence
         ...Object.fromEntries(
           Object.entries(state).filter(
-            ([key]) => !["socket", "connectSocket", "disconnectSocket"].includes(key)
+            ([key]) =>
+              ![
+                "socket",
+                "connectSocket",
+                "disconnectSocket",
+              ].includes(key)
           )
         ),
       }),
     }
   )
 );
-

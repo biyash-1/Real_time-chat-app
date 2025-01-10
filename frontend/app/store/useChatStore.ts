@@ -1,7 +1,8 @@
-
 import { create } from "zustand";
 import { Socket } from "socket.io-client";
 import { useAuthStore } from "./useAuthStore";
+
+const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:3001" : "/";
 
 interface User {
   _id: string;
@@ -21,7 +22,6 @@ interface Message {
 
 interface ChatStoreState {
   messages: Message[];
-  
   socket: Socket | null;
   users: User[];
   selectedUser: User | null;
@@ -29,7 +29,7 @@ interface ChatStoreState {
   isMessagesLoading: boolean;
   getUsers: () => Promise<void>;
   getMessages: (userId: string) => Promise<void>;
-  deleteMessage: (messageId:any) => Promise<void>;
+  deleteMessage: (messageId: any) => Promise<void>;
   setSelectedUser: (selectedUser: User | null) => void;
   sendMessage: (messageData: Omit<Message, "_id" | "createdAt">) => Promise<void>;
   subscribeToMessages: () => void;
@@ -43,13 +43,13 @@ export const useChatStore = create<ChatStoreState>((set, get) => ({
   selectedUser: null,
   isUserLoading: false,
   isMessagesLoading: false,
-  
-    setSelectedUser: (selectedUser) => set({ selectedUser }),
-  
+
+  setSelectedUser: (selectedUser) => set({ selectedUser }),
+
   getUsers: async () => {
     set({ isUserLoading: true });
     try {
-      const response = await fetch("http://localhost:3001/api/message/getUsers", {
+      const response = await fetch(`${BASE_URL}/api/message/getUsers`, {
         method: "GET",
         credentials: "include",
       });
@@ -65,7 +65,7 @@ export const useChatStore = create<ChatStoreState>((set, get) => ({
   getMessages: async (userId: string) => {
     set({ isMessagesLoading: true });
     try {
-      const response = await fetch(`http://localhost:3001/api/message/${userId}`, {
+      const response = await fetch(`${BASE_URL}/api/message/${userId}`, {
         method: "GET",
         credentials: "include",
       });
@@ -78,80 +78,77 @@ export const useChatStore = create<ChatStoreState>((set, get) => ({
     }
   },
 
-
-  deleteMessage: async (messageId:any) => { 
-    const {messages} = get();
+  deleteMessage: async (messageId: any) => {
+    const { messages } = get();
     try {
-      const response = await fetch(`http://localhost:3001/api/message/delete/${messageId}`, {
+      const response = await fetch(`${BASE_URL}/api/message/delete/${messageId}`, {
         method: "DELETE",
         credentials: "include",
       });
-      if(!response.ok) {
+      if (!response.ok) {
         throw new Error("Failed to delete message");
       }
       const data = await response.json();
-      set({ messages: messages.filter(message => message._id !== messageId) });
+      set({ messages: messages.filter((message) => message._id !== messageId) });
     } catch (error) {
       console.error(`Failed to delete message ${messageId}:`, error);
     } finally {
       set({ isMessagesLoading: false });
     }
   },
+
   sendMessage: async (messageData) => {
     const { selectedUser, messages } = get();
-  
+
     // Ensure `messages` is always an array
     if (!Array.isArray(messages)) {
       console.error("Messages state is not an array.");
       return;
     }
-  
+
     if (!selectedUser) {
       console.error("No selected user.");
       return;
     }
-  
+
     try {
-      const response = await fetch(
-        `http://localhost:3001/api/message/send/${selectedUser._id}`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(messageData),
-        }
-      );
-  
+      const response = await fetch(`${BASE_URL}/api/message/send/${selectedUser._id}`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(messageData),
+      });
+
       if (!response.ok) {
         throw new Error("Failed to send message");
       }
-  
+
       const data = await response.json();
-  
+
       // Ensure the response contains the necessary data
       if (!data || !data._id) {
         console.error("Invalid message data received from server:", data);
         return;
       }
-  
+
       // Append the new message to the existing array
       set({ messages: [...messages, data] });
     } catch (error) {
       console.error("Error sending message:", error);
     }
   },
-  
+
   subscribeToMessages: () => {
     const { selectedUser } = get();
     const { socket } = useAuthStore.getState();
-   
+
     if (!selectedUser) {
       console.error("Socket or selected user is not available");
       return;
     }
-    if(!socket){
+    if (!socket) {
       console.error("Socket is not available");
       return;
     }
