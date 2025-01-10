@@ -7,12 +7,12 @@ import NoChatSelected from "@/components/NoChatSelected";
 import ChatContainer from "@/components/ChatContainer";
 import Sidebar from "@/components/Sidebar";
 import withAuth from "../../lib/withAuth";
-import { use, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import {  useEffect } from "react";
+
 
 
 const Page = () => {
-  const router = useRouter();
+
 
   
 
