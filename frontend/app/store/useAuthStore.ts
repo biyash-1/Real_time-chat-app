@@ -51,31 +51,37 @@ export const useAuthStore = create<AuthState>()(
       },
 
       login: async (data: { email: string; password: string }) => {
-        try {
-          const response = await fetch(`${BASE_URL}/api/user/login`, {
-            method: "POST",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-          });
-
-          if (response.ok) {
-            const responseData = await response.json();
-            set({ authUser: responseData.user });
-            toast.success("Login successful");
-            get().connectSocket();
-            console.log("auth user in login function is", get().authUser);
-          } else {
-            const errorData = await response.json();
-            throw new Error(errorData.message || "Invalid credentials");
-          }
-        } catch (err: any) {
-          console.error("Error during login:", err.message);
-          throw err;
+        if (typeof window === 'undefined') {
+            // Prevent the function from executing in non-browser environments
+            return;
         }
-      },
+    
+        try {
+            const response = await fetch(`${BASE_URL}/api/user/login`, {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+    
+            if (response.ok) {
+                const responseData = await response.json();
+                set({ authUser: responseData.user });
+                toast.success("Login successful");
+                get().connectSocket(); // Ensure this function is also safe for client-only
+                console.log("auth user in login function is", get().authUser);
+            } else {
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Invalid credentials");
+            }
+        } catch (err: any) {
+            console.error("Error during login:", err.message);
+            throw err;
+        }
+    },
+    
 
       logout: async () => {
         try {
