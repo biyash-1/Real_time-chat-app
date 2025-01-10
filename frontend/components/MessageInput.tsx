@@ -1,13 +1,14 @@
 import { useRef, useState, ChangeEvent, FormEvent } from "react";
 import { useChatStore } from "../app/store/useChatStore";
 import { Image, Send, X } from "lucide-react";
+import { useAuthStore } from "@/app/store/useAuthStore";
 
 const MessageInput = () => {
   const [text, setText] = useState<string>("");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { sendMessage } = useChatStore();
-
+const {authUser} = useAuthStore();
   // Handle image file change
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
@@ -36,8 +37,9 @@ const MessageInput = () => {
     try {
       // Send message with either text or image
       await sendMessage({
+        sender: authUser?._id,
         text: text.trim(),
-        image: imagePreview,
+        image: imagePreview || undefined,
       });
   
       // Clear form after sending

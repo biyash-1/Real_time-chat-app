@@ -17,7 +17,7 @@ interface Message {
   sender: string;
   createdAt: string;
   text?: string;
-  image?: string;
+  image?: string | null;
 }
 
 interface ChatStoreState {
