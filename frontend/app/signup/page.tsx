@@ -7,6 +7,7 @@ import { Label } from "@radix-ui/react-label";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import {toast} from "react-hot-toast"
+const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:3001" : "/";
 interface FormData {
   username: string;
   email: string;
@@ -70,7 +71,7 @@ const SignupPage: React.FC = () => {
       console.log("User Data:", userData);
 
       // Make a POST request to the signup endpoint
-      await axios.post("http://localhost:3001/api/user/signup", userData);
+      await axios.post(`${BASE_URL}/api/user/signup`, userData);
      router.push("/chatpage")
       toast.success("user created sucessfully")
     } catch (error) {
