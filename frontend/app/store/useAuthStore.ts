@@ -51,10 +51,6 @@ export const useAuthStore = create<AuthState>()(
       },
 
       login: async (data: { email: string; password: string }) => {
-        if (typeof window === 'undefined') {
-            // Prevent the function from executing in non-browser environments
-            return;
-        }
     
         try {
             const response = await fetch(`${BASE_URL}/api/user/login`, {
