@@ -1,10 +1,11 @@
 "use client";
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@radix-ui/react-label";
 import { useAuthStore } from "../store/useAuthStore";
-import { useEffect, useState } from "react";
-
+import { useState } from "react";
+import dynamic from "next/dynamic";
 
 interface UserProfile {
   username: string;
@@ -13,21 +14,11 @@ interface UserProfile {
   avatarUrl: string | null;
 }
 
-const ProfilePage: React.FC = () => {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
+const ProfilePage = () => {
   const [selectedImg, setSelectedImg] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
 
   const { authUser, updateProfile } = useAuthStore();
-
-  if (!isClient) {
-    return <div>Loading...</div>;
-  }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -48,7 +39,7 @@ const ProfilePage: React.FC = () => {
     setUploading(true);
     try {
       await updateProfile(selectedImg);
-      setSelectedImg(null); 
+      setSelectedImg(null);
     } catch (error) {
       console.error("Failed to upload avatar", error);
     } finally {
@@ -141,4 +132,5 @@ const ProfilePage: React.FC = () => {
   );
 };
 
-export default ProfilePage;
+// Export the component dynamically to ensure client-only rendering
+export default dynamic(() => Promise.resolve(ProfilePage), { ssr: false });
