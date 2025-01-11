@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { Socket } from "socket.io-client";
 import { useAuthStore } from "./useAuthStore";
 
-const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:3001" : "/";
+const BASE_URL = process.env.MODE === "development" ? "http://localhost:3001" : process.env.NEXT_PUBLIC_API_URL;
 
 interface User {
   _id: string;

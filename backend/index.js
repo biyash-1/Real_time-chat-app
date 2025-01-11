@@ -32,17 +32,7 @@ app.get('/', (req, res) => {
 app.use("/api/user", userRoute);
 app.use("/api/message", messageRoute);
 
-if (process.env.NODE_ENV === "production") {
-  const next = require('next');
-  const nextApp = next({ dev: false });
-  const handle = nextApp.getRequestHandler();
 
-  nextApp.prepare().then(() => {
-    app.all('*', (req, res) => {
-      return handle(req, res);
-    });
-  });
-}
 
 // Start server
 const PORT = 3001; // Define the port

@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index"
+    "dev": "nodemon src/index.js",
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +23,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.8.3",
     "nodemon": "^3.1.7",
+    "realtime_chatapp": "file:..",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1"
   }

@@ -5,7 +5,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 
 // Use the BASE_URL to handle different environments (development vs production)
-const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:3001" : "/";
+const BASE_URL = process.env.MODE === "development" ? "http://localhost:3001" : process.env.NEXT_PUBLIC_API_URL;
 
 interface AuthState {
   authUser: any;
