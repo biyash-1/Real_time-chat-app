@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import { FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
+import dynamic from "next/dynamic";
 
-export default function About() {
+const About = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center dark:bg-slate-900 p-6 sm:p-12 font-[family-name:var(--font-geist-sans)]">
       <div className="grid lg:grid-cols-2 gap-8 items-center max-w-7xl w-full">
@@ -20,9 +21,9 @@ export default function About() {
             About Me
           </h2>
           <p className="text-lg text-gray-600 dark:text-slate-400 text-center lg:text-left">
-            Hi! I'm Biyash Shrestha, a passionate developer specializing in building
-            real-time web applications. This chat app is a project to bring
-            people closer together through seamless communication.
+            Hi! I'm Biyash Shrestha, a passionate developer specializing in
+            building real-time web applications. This chat app is a project to
+            bring people closer together through seamless communication.
           </p>
           {/* Social Media Icons */}
           <div className="flex justify-center lg:justify-start items-center gap-6 mt-4">
@@ -92,4 +93,7 @@ export default function About() {
       </div>
     </div>
   );
-}
+};
+
+// Dynamic export for client-side rendering only
+export default dynamic(() => Promise.resolve(About), { ssr: false });
