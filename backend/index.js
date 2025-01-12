@@ -18,6 +18,7 @@ app.use(express.json({ limit: "10mb" }));
 app.use(cors({
   origin: 'http://localhost:3000',
   credentials: true,
+  methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
 }))
 
 // Parse incoming JSON requests
