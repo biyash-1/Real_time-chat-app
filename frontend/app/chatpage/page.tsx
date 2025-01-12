@@ -16,7 +16,7 @@ const ChatPage: React.FC = () => {
   console.log("Online users are", onlineUsers);
 
   useEffect(() => {
-    if (authUser && authUser._id) {
+    if (authUser && authUser.id) {
       console.log("authUser is available. Connecting socket...");
       connectSocket();
     } else {

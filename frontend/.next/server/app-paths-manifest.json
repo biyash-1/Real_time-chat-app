@@ -1,9 +1,7 @@
 {
-  "/favicon.ico/route": "app/favicon.ico/route.js",
   "/page": "app/page.js",
   "/chatpage/page": "app/chatpage/page.js",
   "/login/page": "app/login/page.js",
   "/profile/page": "app/profile/page.js",
-  "/about/page": "app/about/page.js",
   "/signup/page": "app/signup/page.js"
 }
