@@ -16,7 +16,7 @@ connectdb();
 app.use(express.json({ limit: "10mb" })); 
 
 app.use(cors({
-  origin: '*',
+  origin: 'http://localhost:3000',
   credentials: true,
 }))
 
