@@ -25,14 +25,10 @@ const SignupPage: React.FC = () => {
   });
 
   const [uploading, setUploading] = useState<boolean>(false);
-  const [baseUrl, setBaseUrl] = useState<string>("/");
+  const BASE_URL = process.env.MODE === "development" ? "http://localhost:3001" : process.env.NEXT_PUBLIC_API_URL;
 
   // Set the BASE_URL based on the environment only on the client side
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setBaseUrl(process.env.NODE_ENV === "development" ? "http://localhost:3001" : "/");
-    }
-  }, []);
+
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -78,7 +74,8 @@ const SignupPage: React.FC = () => {
       console.log("User Data:", userData);
 
       // Make a POST request to the signup endpoint
-      await axios.post(`${baseUrl}/api/user/signup`, userData);
+  
+      await axios.post(`${BASE_URL}/api/user/signup`, userData);
       router.push("/chatpage");
       toast.success("User created successfully");
     } catch (error) {

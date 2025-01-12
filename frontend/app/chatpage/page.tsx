@@ -12,7 +12,7 @@ const ChatPage: React.FC = () => {
   const { authUser, onlineUsers, connectSocket } = useAuthStore();
   const { selectedUser } = useChatStore();
 
-  console.log("Token is", authUser.token);
+ 
   console.log("Online users are", onlineUsers);
 
   useEffect(() => {
