@@ -11,6 +11,7 @@ cloudinary.config({
 
 export const getUsersForSidebar = async (req, res) => {
   try {
+    
     const loggedInUser = req.user.id;
     const filteredUsers = await User.find({ _id: { $ne: loggedInUser } });
     res.status(200).json(filteredUsers);
