@@ -150,17 +150,32 @@ export const useAuthStore = create<AuthState>()(
 
       disconnectSocket: () => {
         const socket = get().socket;
-        if (socket && socket.connected) {
-            socket.off("newMessage");
-            socket.off("getOnlineUsers");
-            // Add other events you are listening to here...
-            socket.disconnect();
-            console.log("Socket disconnected");
-        } else {
-            console.log("No active socket to disconnect");
+      
+        try {
+          if (socket) {
+            console.log("Socket before disconnecting:", socket);
+      
+            if (socket.connected===true) {
+              socket.off("newMessage");
+              socket.off("getOnlineUsers");
+              // Add other events you are listening to here...
+              socket.disconnect();
+              console.log("Socket disconnected successfully");
+            } else {
+              console.log("Socket is already disconnected");
+            }
+          } else {
+            // No need to log an error, simply ignore the situation
+            console.log("Socket is not initialized");
+          }
+      
+          set({ socket: null }); // Clear socket state after disconnection
+        } catch (error) {
+          // If there's an error (e.g., socket is not initialized), log it but don't let it break the app
+          console.error("Error while disconnecting socket:", error);
         }
-        set({ socket: null });
-    },
+      },
+      
     
     }),
     {

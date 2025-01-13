@@ -98,21 +98,20 @@ export const useChatStore = create<ChatStoreState>((set, get) => ({
       set({ isMessagesLoading: false });
     }
   },
+  // Ensure `messages` is always an array
+  // if (!Array.isArray(messages)) {
+  //   console.error("Messages state is not an array.");
+  //   return;
+  // }
 
   sendMessage: async (messageData) => {
     const { selectedUser, messages } = get();
-
-    // Ensure `messages` is always an array
-    if (!Array.isArray(messages)) {
-      console.error("Messages state is not an array.");
-      return;
-    }
-
+  
     if (!selectedUser) {
       console.error("No selected user.");
       return;
     }
-
+  
     try {
       const response = await fetch(`${BASE_URL}/api/message/send/${selectedUser._id}`, {
         method: "POST",
@@ -122,26 +121,27 @@ export const useChatStore = create<ChatStoreState>((set, get) => ({
         },
         body: JSON.stringify(messageData),
       });
-
+  
       if (!response.ok) {
         throw new Error("Failed to send message");
       }
-
+  
       const data = await response.json();
-
+  
       // Ensure the response contains the necessary data
       if (!data || !data._id) {
         console.error("Invalid message data received from server:", data);
         return;
       }
-
-      // Append the new message to the existing array
-      set({ messages: [...messages, data] });
+  
+      // Ensure messages is initialized as an array
+      const updatedMessages = Array.isArray(messages) ? messages : [];
+      set({ messages: [...updatedMessages, data] });
     } catch (error) {
       console.error("Error sending message:", error);
     }
   },
-
+  
   subscribeToMessages: () => {
     const { selectedUser } = get();
     console.log("selected user",selectedUser);
@@ -169,11 +169,18 @@ export const useChatStore = create<ChatStoreState>((set, get) => ({
   },
 
   unsubscribeFromMessages: () => {
-    const { socket } = useAuthStore.getState();
+    const socket = get().socket;
+  
     if (socket) {
-      socket.off("newMessage");
+      try {
+        socket.off("newMessage"); 
+        console.log("Unsubscribed from newMessage event");
+      } catch (error) {
+        console.error("Error unsubscribing from messages:", error);
+      }
     } else {
-      console.error("Socket is not initialized");
+      console.log("Socket is not initialized, skipping unsubscribe");
     }
   },
+  
 }));
