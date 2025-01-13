@@ -9,20 +9,27 @@ import dynamic from "next/dynamic";
 import { useEffect } from "react";
 
 const ChatPage: React.FC = () => {
-  const { authUser, onlineUsers, connectSocket } = useAuthStore();
+  const { authUser, onlineUsers, connectSocket,socket } = useAuthStore();
+
+  console.log("auth user in chat page",authUser);
+  
   const { selectedUser } = useChatStore();
 
  
   console.log("Online users are", onlineUsers);
 
   useEffect(() => {
-    if (authUser && authUser.id) {
+    if (authUser) {
       console.log("authUser is available. Connecting socket...");
       connectSocket();
+      console.log("socket is", socket);
     } else {
       console.log("Waiting for authUser to be available...");
     }
   }, [authUser?.id]);
+
+  console.log("socket is", socket);
+  
 
   return (
     <div className="h-screen">

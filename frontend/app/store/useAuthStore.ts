@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 // Use the BASE_URL to handle different environments (development vs production)
 const BASE_URL = process.env.MODE === "development" ? "http://localhost:3001" : process.env.NEXT_PUBLIC_API_URL;
 
+
 interface AuthState {
   authUser: any;
   isUpdatingProfile: boolean;
@@ -118,25 +119,27 @@ export const useAuthStore = create<AuthState>()(
       },
 
       connectSocket: () => {
-        const { authUser, socket } = get();
-        console.log("authUser", authUser);
+        const { authUser } = get();
 
-        if (!authUser || !authUser._id) {
+       
+        console.log("authUse after login r", authUser);
+
+        if (!authUser || !authUser.id) {
           console.log("No auth user");
           return;
         }
 
-        if (authUser && !socket) {
+        if (authUser) {
           const newSocket = io(BASE_URL, {
             query: {
-              userId: authUser._id,
+              userId: authUser.id,
             },
           });
           newSocket.connect();
 
           set({ socket: newSocket });
 
-          console.log("Socket from connectSocket function is", socket);
+          console.log("Socket from connectSocket function is", newSocket);
           newSocket.on("getOnlineUsers", (userIds) => {
             console.log("Online users received:", userIds);
             set({ onlineUsers: userIds });
@@ -148,10 +151,17 @@ export const useAuthStore = create<AuthState>()(
       disconnectSocket: () => {
         const socket = get().socket;
         if (socket && socket.connected) {
-          socket.disconnect();
+            socket.off("newMessage");
+            socket.off("getOnlineUsers");
+            // Add other events you are listening to here...
+            socket.disconnect();
+            console.log("Socket disconnected");
+        } else {
+            console.log("No active socket to disconnect");
         }
         set({ socket: null });
-      },
+    },
+    
     }),
     {
       name: "auth-storage",

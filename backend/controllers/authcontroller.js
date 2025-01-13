@@ -57,7 +57,7 @@ cloudinary.config({
         res.cookie("token", token, {
             httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
             secure: process.env.NODE_ENV === "production", // Ensures cookies are sent over HTTPS in production
-            sameSite: "strict", // Protects against CSRF
+            sameSite: "None", // Protects against CSRF
             maxAge: 3600000, // 1 hour in milliseconds
         });
 

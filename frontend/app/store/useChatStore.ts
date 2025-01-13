@@ -4,6 +4,8 @@ import { useAuthStore } from "./useAuthStore";
 
 const BASE_URL = process.env.MODE === "development" ? "http://localhost:3001" : process.env.NEXT_PUBLIC_API_URL;
 
+
+
 interface User {
   _id: string;
   username: string;
@@ -142,6 +144,8 @@ export const useChatStore = create<ChatStoreState>((set, get) => ({
 
   subscribeToMessages: () => {
     const { selectedUser } = get();
+    console.log("selected user",selectedUser);
+    
     
     if (!selectedUser) {
       console.error("Socket or selected user is not available");

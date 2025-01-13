@@ -12,14 +12,14 @@ const ChatContainer = () => {
   const {
     messages,
     getMessages,
-    socket,
+    
     deleteMessage,
     isMessagesLoading,
     selectedUser,
     subscribeToMessages,
     unsubscribeFromMessages,
   } = useChatStore();
-  const { authUser } = useAuthStore();
+  const { authUser,socket } = useAuthStore();
   console.log("auth user in chat container is",authUser);
   console.log("messages in chat container are",messages);
 console.log("selected user is",selectedUser);
@@ -78,7 +78,7 @@ console.log("selected user is",selectedUser);
         {authUser && messages && Array.isArray(messages) && messages.map((message, index) => (
           <div
             key={message._id || `message-${index}`}
-            className={`chat ${message.sender === authUser._id ? "chat-end" : "chat-start"}`}
+            className={`chat ${message.sender === authUser.id ? "chat-end" : "chat-start"}`}
             onMouseEnter={() => setHoveredMessageId(message._id)}
             onMouseLeave={() => {
               setHoveredMessageId(null);
@@ -88,7 +88,7 @@ console.log("selected user is",selectedUser);
             <div className="chat-image avatar">
               <div className="size-10 rounded-full border">
                 <img
-                  src={message.sender === authUser._id ? authUser?.profilePicture || "avatar.png" : selectedUser?.profilePicture || "avatar.png"}
+                  src={message.sender === authUser.id ? authUser?.profilePicture || "avatar.png" : selectedUser?.profilePicture || "avatar.png"}
                   alt="profile picture"
                 />
               </div>
