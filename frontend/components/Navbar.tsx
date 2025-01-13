@@ -27,7 +27,7 @@ const Navbar: React.FC = () => {
         className="text-lg font-bold cursor-pointer hover:text-gray-600 dark:hover:text-gray-300"
         onClick={() => router.push("/")}
       >
-        MyApp<span className="text-red-500">beta</span>
+        Chat<span className="text-red-500">Me</span>
       </div>
 
       {/* Navigation Links */}

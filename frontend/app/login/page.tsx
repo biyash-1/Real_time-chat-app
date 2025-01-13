@@ -1,4 +1,3 @@
-// page.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -41,6 +40,27 @@ const Page: React.FC = () => {
     router.push('/signup');
   };
 
+  const handleGuestLogin =  async() => {
+    setLoading(true);
+    // Set email and password as guest credentials
+    setEmail('guest@gmail.com');
+    setPassword('guest1234');
+  
+    try {
+    
+      await login({ email: 'guest@gmail.com', password: 'guest1234' });
+  
+     
+      router.push('/chatpage');
+    } catch (err: any) {
+     
+      alert(err.message || 'An error occurred during login. Please try again.');
+    } finally {
+      // Set loading state to false after login attempt
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="h-screen flex items-center justify-center mx-auto p-20">
       <Card className="p-4 flex flex-col items-start justify-center gap-4 w-1/4">
@@ -73,6 +93,9 @@ const Page: React.FC = () => {
             <p className="text-sm">Don't have an account?</p>
             <Button className="w-full" variant="outline" onClick={handleSignup}>
               Signup
+            </Button>
+            <Button className="w-full bg-blue-800 text-white"  onClick={handleGuestLogin}>
+            {loading ? 'Logging in...' : 'Login as Guest'}
             </Button>
           </div>
         </CardFooter>
