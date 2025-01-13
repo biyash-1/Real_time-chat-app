@@ -16,7 +16,7 @@ connectdb();
 app.use(express.json({ limit: "10mb" })); 
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: ['http://localhost:3000','https://real-time-chat-app-bay.vercel.app'],
   credentials: true,
   methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
 }))
