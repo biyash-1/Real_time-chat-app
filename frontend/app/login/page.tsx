@@ -40,23 +40,18 @@ const Page: React.FC = () => {
     router.push('/signup');
   };
 
-  const handleGuestLogin =  async() => {
+  const handleGuestLogin = async () => {
     setLoading(true);
     // Set email and password as guest credentials
     setEmail('guest@gmail.com');
     setPassword('guest1234');
-  
+
     try {
-    
       await login({ email: 'guest@gmail.com', password: 'guest1234' });
-  
-     
       router.push('/chatpage');
     } catch (err: any) {
-     
       alert(err.message || 'An error occurred during login. Please try again.');
     } finally {
-      // Set loading state to false after login attempt
       setLoading(false);
     }
   };
@@ -65,6 +60,15 @@ const Page: React.FC = () => {
     <div className="h-screen flex items-center justify-center mx-auto p-20">
       <Card className="p-4 flex flex-col items-start justify-center gap-4 w-1/4">
         <CardHeader className="text-3xl font-bold text-center mx-auto">Login</CardHeader>
+
+        {/* Informational message at the top */}
+        <div className="bg-blue-100 text-blue-800 p-4 rounded-md text-center mb-2">
+          <p className="text-sm">
+            You can log in as a guest  and chat with others. If you'd like to create your own account, use the "Signup" button in icognito tab where u can chat with guest in real time with ur own account <br />
+            You don't need a real email; simply use something like "yourname@gmail.com".
+          </p>
+        </div>
+
         <div className="flex flex-col gap-2 w-full">
           <Label htmlFor="email">Email:</Label>
           <Input
@@ -94,8 +98,8 @@ const Page: React.FC = () => {
             <Button className="w-full" variant="outline" onClick={handleSignup}>
               Signup
             </Button>
-            <Button className="w-full bg-blue-800 text-white"  onClick={handleGuestLogin}>
-            {loading ? 'Logging in...' : 'Login as Guest'}
+            <Button className="w-full bg-blue-800 text-white" onClick={handleGuestLogin}>
+              {loading ? 'Logging in...' : 'Login as Guest'}
             </Button>
           </div>
         </CardFooter>
