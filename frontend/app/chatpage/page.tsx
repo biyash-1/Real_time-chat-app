@@ -22,7 +22,7 @@ const ChatPage: React.FC = () => {
     } else {
       console.log("Waiting for authUser to be available...");
     }
-  }, [authUser?._id]);
+  }, [authUser?.id]);
 
   return (
     <div className="h-screen">

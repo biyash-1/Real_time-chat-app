@@ -142,14 +142,17 @@ export const useChatStore = create<ChatStoreState>((set, get) => ({
 
   subscribeToMessages: () => {
     const { selectedUser } = get();
-    const { socket } = useAuthStore.getState();
-
+    
     if (!selectedUser) {
       console.error("Socket or selected user is not available");
       return;
     }
+    const socket  = useAuthStore.getState().socket;
+    console.log("socket is",socket);
+    
     if (!socket) {
-      console.error("Socket is not available");
+
+      
       return;
     }
 
