@@ -4,7 +4,6 @@ import { io, Socket } from "socket.io-client";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
-// Use the BASE_URL to handle different environments (development vs production)
 const BASE_URL = process.env.MODE === "development" ? "http://localhost:3001" : process.env.NEXT_PUBLIC_API_URL;
 
 
@@ -165,7 +164,7 @@ export const useAuthStore = create<AuthState>()(
               console.log("Socket is already disconnected");
             }
           } else {
-            // No need to log an error, simply ignore the situation
+           
             console.log("Socket is not initialized");
           }
       

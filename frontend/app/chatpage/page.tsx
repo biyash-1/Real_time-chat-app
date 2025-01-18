@@ -36,7 +36,7 @@ const ChatPage: React.FC = () => {
       <div className="flex items-center justify-center pt-10 border-black">
         <div className="dark:bg-slate-900 bg-slate-400/10 rounded-lg w-full max-w-6xl h-[calc(100vh-4rem)] px-4">
           <div className="flex h-full rounded-lg overflow-hidden">
-            <Sidebar />
+            <Sidebar  />
             {selectedUser ? <ChatContainer /> : <NoChatSelected />}
           </div>
         </div>

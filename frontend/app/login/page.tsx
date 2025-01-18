@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '../store/useAuthStore';
-import loginAuth from '../../lib/loginAuth';
 
 // Make sure this component is client-side rendered only
 const Page: React.FC = () => {
@@ -110,4 +109,4 @@ const Page: React.FC = () => {
 };
 
 // Export dynamically as a client-only component
-export default dynamic(() => Promise.resolve(loginAuth(Page)), { ssr: false });
+export default dynamic(() => Promise.resolve(Page), { ssr: false });

@@ -28,7 +28,7 @@ console.log("selected user is",selectedUser);
   
   const [hoveredMessageId, setHoveredMessageId] = useState<string | null>(null); 
   const [showDeleteButton, setShowDeleteButton] = useState<string | null>(null); 
-
+  const [showChat, setShowChat] = useState(false);
   
   const scrollToBottom = () => {
     const container = document.querySelector(".messages-container");
@@ -73,8 +73,9 @@ console.log("selected user is",selectedUser);
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden mb-6 ">
+      
       <ChatHeader />
-      <div className="messages-container h-full overflow-y-auto p-2 space-y-2 ">
+      <div className="messages-container  h-full overflow-y-auto p-2 space-y-2 ">
         {authUser && messages && Array.isArray(messages) && messages.map((message, index) => (
           <div
             key={message._id || `message-${index}`}
