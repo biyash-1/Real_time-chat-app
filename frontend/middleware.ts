@@ -1,26 +1,34 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+  // Install this library using npm or yarn
+// Replace with your actual secret key
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
-  const publicPath = ["/login", "/signup"].includes(request.nextUrl.pathname);
+  console.log("Token in middleware:", token);
 
-  console.log("Token:", token);
+  const pathname = request.nextUrl.pathname;
 
-  // If no token, redirect to login
-  if (!token && !publicPath) {
+  // Public paths that don't require authentication
+  const publicPaths = ['/login', '/signup','/'];
+  const isPublicPath = publicPaths.includes(pathname);
+
+  // If the path is public, allow the request to proceed
+  if (isPublicPath) {
+    return NextResponse.next();
+  }
+
+  // If no token is present, redirect to login
+  if (!token) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  // If token exists and the user is on a public path, redirect to chatpage
-  if (token && publicPath) {
-    return NextResponse.redirect(new URL('/chatpage', request.url));
-  }
+  
 
   // Allow the request to proceed
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/chatpage/:path*', '/login', '/signup'], // Match protected and public routes
+  matcher: ['/chatpage/:path*', '/login', '/signup'], // Match routes for middleware
 };
