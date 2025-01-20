@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-  // Install this library using npm or yarn
-// Replace with your actual secret key
+
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
@@ -13,7 +12,7 @@ export function middleware(request: NextRequest) {
   const publicPaths = ['/login', '/signup','/'];
   const isPublicPath = publicPaths.includes(pathname);
 
-  // If the path is public, allow the request to proceed
+ 
   if (isPublicPath) {
     return NextResponse.next();
   }
@@ -30,5 +29,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/chatpage/:path*', '/login', '/signup'], // Match routes for middleware
+  matcher: ['/chatpage/:path*', '/login', '/signup','/profile'], // Match routes for middleware
 };

@@ -64,23 +64,24 @@ export default function Home() {
 
       {/* Video Frame */}
       {showVideo && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="relative bg-white rounded-lg shadow-lg p-4 w-full max-w-3xl">
-            <button
-              onClick={closeVideo}
-              className="absolute top-0 right-2 text-red-600 text-2xl font-bold"
-            >
-              ×
-            </button>
-            <video
-              src="/chatrecording.mp4" // Replace with the path to your video
-              controls
-              autoPlay
-              className="rounded-lg w-full"
-            />
-          </div>
-        </div>
-      )}
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="relative bg-white rounded-lg shadow-lg p-4 w-full max-w-4xl">
+      <button
+        onClick={closeVideo}
+        className="absolute top-0 right-2 text-red-600 text-2xl font-bold"
+      >
+        ×
+      </button>
+      <video
+        src="/chatrecording.mp4" // Replace with the path to your video
+        controls
+        autoPlay
+        className="rounded-lg w-full h-[500px]" // Adjusted height
+      />
+    </div>
+  </div>
+)}
+
     </div>
   );
 }

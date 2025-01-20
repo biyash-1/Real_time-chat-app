@@ -4,9 +4,9 @@ import { io, Socket } from "socket.io-client";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
-// const BASE_URL = process.env.MODE === "development" ? "http://localhost:3001" : process.env.NEXT_PUBLIC_API_URL;
+const BASE_URL = process.env.MODE === "development" ? "http://localhost:3001" : process.env.NEXT_PUBLIC_API_URL ;
+// const BASE_URL = "http://localhost:3001";
 
-const BASE_URL = "http://localhost:3001";
 interface AuthState {
   authUser: any;
   isUpdatingProfile: boolean;
