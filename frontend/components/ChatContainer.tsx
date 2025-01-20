@@ -28,7 +28,7 @@ console.log("selected user is",selectedUser);
   
   const [hoveredMessageId, setHoveredMessageId] = useState<string | null>(null); 
   const [showDeleteButton, setShowDeleteButton] = useState<string | null>(null); 
-  const [showChat, setShowChat] = useState(false);
+  
   
   const scrollToBottom = () => {
     const container = document.querySelector(".messages-container");
