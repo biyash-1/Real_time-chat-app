@@ -5,7 +5,7 @@ import { useChatStore } from "../store/useChatStore";
 import NoChatSelected from "@/components/NoChatSelected";
 import ChatContainer from "@/components/ChatContainer";
 import Sidebar from "@/components/Sidebar";
-import dynamic from "next/dynamic";
+
 import { useEffect } from "react";
 import withAuth from "@/lib/withAuth";
 
