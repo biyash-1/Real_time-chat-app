@@ -35,16 +35,16 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         method: "GET",
         credentials: "include",
       });
-      if (response.ok) {
-        const data = await response.json();
+      const data = await response.json();
+      if (response.ok && data.user) {
         set({ authUser: data.user, isCheckingAuth: false });
         get().connectSocket();
       } else {
-        set({ authUser: null });
+        set({ authUser: null, isCheckingAuth: false }); // Ensure isCheckingAuth is set to false
       }
     } catch (err) {
-      console.error("Error during authentication check:", err);
-      set({ authUser: null });
+      console.error("Check auth error:", err);
+      set({ authUser: null, isCheckingAuth: false });
     }
   },
 
