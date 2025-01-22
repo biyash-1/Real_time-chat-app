@@ -106,10 +106,14 @@ cloudinary.config({
         // Set the token in an HttpOnly cookie
         res.cookie("token", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
+            secure: true, // Must be true in production
             sameSite: 'None',
-            maxAge: 3600000, // 1 hour in milliseconds
-        });
+            maxAge: 3600000,
+            path: '/',
+            domain: process.env.NODE_ENV === 'production' 
+              ? 'https://real-time-chat-app-bay.vercel.app/' 
+              : 'localhost'
+          });
 
         res.status(200).json({
             message: "Login successful",
