@@ -7,6 +7,7 @@ import ChatContainer from "@/components/ChatContainer";
 import Sidebar from "@/components/Sidebar";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
+import withAuth from "@/lib/withAuth";
 
 const ChatPage: React.FC = () => {
   const { authUser, onlineUsers, connectSocket } = useAuthStore();
@@ -46,4 +47,4 @@ const ChatPage: React.FC = () => {
 };
 
 // Export dynamically as a client-only component
-export default dynamic(() => Promise.resolve(ChatPage), { ssr: false });
+export default dynamic(() => Promise.resolve(withAuth(ChatPage)), { ssr: false });
