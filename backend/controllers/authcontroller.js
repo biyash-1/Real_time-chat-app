@@ -110,9 +110,7 @@ cloudinary.config({
             sameSite: 'None',
             maxAge: 3600000,
             path: '/',
-            domain: process.env.NODE_ENV === 'production' 
-              ? 'https://real-time-chat-app-bay.vercel.app/' 
-              : 'localhost'
+            
           });
 
         res.status(200).json({
