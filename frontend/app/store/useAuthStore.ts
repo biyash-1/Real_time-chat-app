@@ -40,13 +40,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         set({ authUser: data.user, isCheckingAuth: false });
         get().connectSocket();
       } else {
-        set({ authUser: null, isCheckingAuth: false }); // Ensure isCheckingAuth is set to false
+        set({ authUser: null, isCheckingAuth: false });
       }
     } catch (err) {
       console.error("Check auth error:", err);
       set({ authUser: null, isCheckingAuth: false });
     }
   },
+  
 
   login: async (data: { email: string; password: string }) => {
     try {
