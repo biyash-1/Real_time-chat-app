@@ -44,19 +44,21 @@ const Navbar: React.FC = () => {
         >
           About
         </Link>
-        <Link
-          href="/chatpage"
-          className="hover:underline hover:text-gray-600 dark:hover:text-gray-300"
-        >
-          Messenger
-        </Link>
         {authUser && (
-          <Link
-            href="/profile"
-            className="hover:underline hover:text-gray-600 dark:hover:text-gray-300"
-          >
-            Profile
-          </Link>
+          <>
+            <Link
+              href="/profile"
+              className="hover:underline hover:text-gray-600 dark:hover:text-gray-300"
+            >
+              Profile
+            </Link>
+            <Link
+              href="/chatpage"
+              className="hover:underline hover:text-gray-600 dark:hover:text-gray-300"
+            >
+              Messenger
+            </Link>
+          </>
         )}
       </div>
 
