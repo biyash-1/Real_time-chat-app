@@ -47,4 +47,4 @@ const ChatPage: React.FC = () => {
 };
 
 // Export dynamically as a client-only component
-export default dynamic(() => Promise.resolve(withAuth(ChatPage)), { ssr: false });
+export default withAuth(ChatPage);

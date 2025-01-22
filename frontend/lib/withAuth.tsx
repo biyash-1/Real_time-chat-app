@@ -15,8 +15,8 @@ const withAuth = (WrappedComponent: React.FC) => {
 
     useEffect(() => {
       // Only redirect if we're done checking auth and there's no user
-      if (!isCheckingAuth && !authUser) {
-        router.replace("/login"); // Redirect to login if not authenticated
+      if (!isCheckingAuth && authUser===null) {
+        router.push("/login"); // Redirect to login if not authenticated
       }
     }, [authUser, isCheckingAuth, router]);
 
