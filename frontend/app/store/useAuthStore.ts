@@ -10,6 +10,7 @@ const BASE_URL = process.env.MODE === "development" ? "http://localhost:3001" : 
 
 interface AuthState {
   authUser: any;
+  isloggedin: boolean;
   isUpdatingProfile: boolean;
   onlineUsers: any[];
   isCheckingAuth: boolean;
@@ -27,6 +28,7 @@ export const useAuthStore = create<AuthState>()(
     (set, get) => ({
       hasHydrated: false,
       authUser: null,
+      isloggedin: false,
       isCheckingAuth: true,
       onlineUsers: [],
       isUpdatingProfile: false,
@@ -40,6 +42,7 @@ export const useAuthStore = create<AuthState>()(
           const data = await response.json();
           if (response.ok && data.user) {
             set({ authUser: data.user, isCheckingAuth: false });
+
             get().connectSocket();
           } else {
             set({ authUser: null, isCheckingAuth: false });
@@ -64,6 +67,7 @@ export const useAuthStore = create<AuthState>()(
           if (response.ok) {
             const responseData = await response.json();
             set({ authUser: responseData.user });
+            set({ isloggedin: true });
             toast.success("Login successful");
             get().connectSocket();
             console.log("auth user in login function is", get().authUser);
